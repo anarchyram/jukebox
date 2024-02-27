@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jukebox App</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url('https://github.com/anarchyram/jukebox/raw/main/images/weathered%20steeel.jpg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        margin: 0;
+        padding: 0;
+    }
+    #jukebox {
+        width: 80%;
+        margin: 50px auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .button:hover {
+        background-color: #0072a7;
+    }
+    #savedSongs {
+        margin-top: 20px;
+        list-style-type: none;
+        padding: 0;
+        background-color: transparent;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    #savedSongs li {
+        padding: 5px;
+        cursor: pointer;
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex-basis: 10%;
+        margin: 100px;
+    }
+    #savedSongs li img {
+        width: 200px;
+        height: 200px;
+        margin-bottom: 10px;
+    }
+    #savedSongs li .songTitle {
+        font-weight: bold;
+        font-family: 'NeonFont', Arial, sans-serif;
+        text-transform: uppercase;
+        color: #00ff00;
+    }
+
+    .volumeControl {
+        margin-top: 1px;
+    }
+    #gifSection {
+        margin-top: 50px;
+        text-align: center;
+    }
+    .fullscreen img {
+        max-width: 100%;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    .fullscreen img:hover {
+        transform: scale(1.1);
+    }
+    .neonGlow {
+        font-family: 'NeonFont', Arial, sans-serif;
+        color: #00f;
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f, 0 0 20px #00f, 0 0 30px #00f, 0 0 40px #00f, 0 0 55px #00f, 0 0 75px #00f;
+        animation: pulsate 2s ease-out infinite;
+    }
+    @keyframes pulsate {
+        0% { color: #fff; text-shadow: none; }
+        50% { color: #00f; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f, 0 0 20px #00f, 0 0 30px #00f, 0 0 40px #00f, 0 0 55px #00f, 0 0 75px #00f; }
+        100% { color: #fff; text-shadow: none; }
+    }
+</style>
+</head>
+<body>
+
+<div id="jukebox">
+    <h1 class="neonGlow">Welcome Capt. Wil</h1>
+    <h2 class="neonGlow">Volume</h2>
+    <input type="range" min="0" max="1" step="0.01" value="1" class="volumeControl">
+    <ul id="savedSongs">
+        <!-- Songs will be dynamically added here -->
+    </ul>
+</div>
+
+<div id="gifSection">
+    <!-- GIFs will be dynamically added here -->
+</div>
+
+<script>
+    // GitHub repository details
+    const username = 'anarchyram';
+    const repository = 'jukebox';
+    const branch = 'main';
+
+    // Volume control
+    const volumeControl = document.querySelector('.volumeControl');
+
+    // Function to update volume for all audio elements
+    function updateVolume(volume) {
+        const audioElements = document.querySelectorAll('audio');
+        audioElements.forEach(audio => {
+            audio.volume = volume;
+        });
+    }
+
+    // Event listener for volume control
+    volumeControl.addEventListener('input', function() {
+        const volume = parseFloat(this.value);
+        updateVolume(volume);
+    });
+
+    // Fetch the list of songs from the GitHub repository
+    fetch(`https://api.github.com/repos/${username}/${repository}/contents`, {
+        headers: {
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const savedSongsList = document.getElementById('savedSongs');
+
+        // Filter out files that are not audio files
+        const audioFiles = data.filter(file => file.type === 'file' && file.name.endsWith('.mp3'));
+
+        // Create list items for each audio file and add them to the savedSongsList
+        audioFiles.forEach(file => {
+            const listItem = document.createElement('li');
+            const audioElement = document.createElement('audio');
+            const imgElement = document.createElement('img');
+            const songTitleElement = document.createElement('span');
+            
+            audioElement.controls = true;
+            audioElement.innerHTML = `<source src="${file.download_url}" type="audio/mpeg">Your browser does not support the audio element.`;
+
+            // Set cover art image
+            const coverArtName = file.name.replace('.mp3', '');
+            imgElement.src = `https://github.com/anarchyram/jukebox/raw/main/images/${coverArtName}.jpg`;
+            imgElement.alt = 'Cover Art';
+
+            // Set song title
+            songTitleElement.textContent = coverArtName.toUpperCase(); // Convert to uppercase
+
+            // Event listener to play the audio when clicked
+            listItem.addEventListener('click', function() {
+                playAudio(audioElement);
+            });
+
+            listItem.appendChild(imgElement);
+            listItem.appendChild(songTitleElement);
+            listItem.appendChild(audioElement);
+            savedSongsList.appendChild(listItem);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+
+    // Fetch the list of GIFs from the GitHub repository and add them to the gifSection
+    fetch(`https://api.github.com/repos/${username}/${repository}/contents/images`, {
+        headers: {
+            'Accept': 'application/vnd.github.v3+json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const gifSection = document.getElementById('gifSection');
+
+        // Filter out files that are GIFs
+        const gifFiles = data.filter(file => file.type === 'file' && file.name.endsWith('.gif'));
+
+        // Create img elements for each GIF and add them to the gifSection
+        gifFiles.forEach(file => {
+            const imgElement = document.createElement('img');
+            const gifName = file.name.replace('.gif', '');
+            imgElement.src = `https://github.com/anarchyram/jukebox/raw/main/images/${file.name}`;
+            imgElement.alt = gifName;
+            imgElement.classList.add('fullscreen');
+
+            // Add click event listener to enlarge the GIF on click
+            imgElement.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+
+            gifSection.appendChild(imgElement);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+</script>
+
+</body>
+</html>
