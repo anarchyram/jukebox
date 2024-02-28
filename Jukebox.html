@@ -98,15 +98,9 @@
       }
       /* Define the pulsing animation */
       @keyframes border-pulse {
-         0% {
-            border-color: #f00;
-         }
-         50% {
-            border-color: #0f0;
-         }
-         100% {
-            border-color: #00f;
-         }
+        0% { color: #fff; text-shadow: none; }
+        50% { color: #00f; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f, 0 0 20px #00f, 0 0 30px #00f, 0 0 40px #00f, 0 0 55px #00f, 0 0 75px #00f; }
+        100% { color: #fff; text-shadow: none; }
       }
 </style>
 </head>
