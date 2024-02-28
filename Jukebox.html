@@ -86,12 +86,40 @@
         50% { color: #00f; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f, 0 0 20px #00f, 0 0 30px #00f, 0 0 40px #00f, 0 0 55px #00f, 0 0 75px #00f; }
         100% { color: #fff; text-shadow: none; }
     }
+          .box {
+         display: inline-block;
+         padding: 10px;
+         font-size: 18px;
+         color: #333;
+         border: 2px solid transparent;
+         transition: border 0.5s ease;
+         /* Add the pulsing animation to the border */
+         animation: border-pulse 2s ease-in-out infinite;
+      }
+      /* When the box is hovered, change the border to a gradient and disable the pulsing animation */
+      .box:hover {
+         border-image: linear-gradient(to right, #f00, #0f0, #00f);
+         border-image-slice: 1;
+         animation: none;
+      }
+      /* Define the pulsing animation */
+      @keyframes border-pulse {
+         0% {
+            border-color: #f00;
+         }
+         50% {
+            border-color: #0f0;
+         }
+         100% {
+            border-color: #00f;
+         }
+      }
 </style>
 </head>
 <body>
 
 <div id="jukebox">
-    <h1 class="neonGlow">Welcome Capt. Wil</h1>
+    <h1 class="box">Welcome Capt. Wil</h1>
     <input type="range" min="0" max="1" step="0.01" value="1" class="volumeControl">
     <h4 class="neonGlow">Volume</h4>
     <ul id="savedSongs">
