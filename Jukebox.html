@@ -12,16 +12,13 @@
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: center;
-        border: 10px solid transparent; /* add a border */
+        border: 30px solid; /* add a border */
         background-color: black; /* set the background color to red */
         margin: 0;
         padding: 0;
-        animation: border-pulse 5s ease-in-out infinite;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        min-height: 100vh;
+        animation: border-pulse 2s ease-in-out infinite;
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+        box-shadow: inset rgb(0, 255, 76) 0px 0px 100px 0px;
     }
     #jukebox {
         width: 100%;
@@ -83,29 +80,28 @@
     }
     .neonGlow {
         font-family: 'NeonFont', Helvetica, sans-serif;
-        color: #00f;
-        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f, 0 0 20px #00f, 0 0 30px #00f, 0 0 40px #00f, 0 0 55px #00f, 0 0 75px #00f;
+        color: rgb(255, 0, 0);
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px rgb(255, 0, 0), 0 0 20px rgb(255, 0, 0), 0 0 30px rgb(255, 0, 0), 0 0 40px rgb(255, 0, 0), 0 0 55px rgb(255, 0, 0), 0 0 75px rgb(255, 0, 0);
         animation: pulsate 2s ease-out infinite;
     }
     @keyframes pulsate {
         0% { color: #fff; text-shadow: none; }
-        50% { color: #00f; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f, 0 0 20px #00f, 0 0 30px #00f, 0 0 40px #00f, 0 0 55px #00f, 0 0 75px #00f; }
+        50% { color: rgb(255, 0, 0); text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px rgb(255, 0, 0), 0 0 20px rgb(255, 0, 0), 0 0 30px rgb(255, 0, 0), 0 0 40px rgb(255, 0, 0), 0 0 55px rgb(255, 0, 0), 0 0 75px rgb(255, 0, 0); }
         100% { color: #fff; text-shadow: none; }
     }
-    .box {
+    .pulsateText {
         display: inline-block;
-        padding: 10px;
-        font-size: 26px;
+        padding: 0px;
+        font-size: 10px;
         color: #fff;
-        border: 10px solid transparent;
+        border: 1px solid red;
         transition: border 0.5s ease;
-        /* Add the pulsing animation to the border */
-        animation: border-pulse 5s ease-in-out infinite;
+
       }
       /* Define the pulsing animation */
       @keyframes border-pulse {
         0% { color: #fff; border-color: none; }
-        50% { color: #00f; border-color: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00f, 0 0 20px #00f, 0 0 30px #00f, 0 0 40px #00f, 0 0 55px #00f, 0 0 75px #00f; }
+        50% { color: rgb(0, 255, 13); border-color: 0 0 -5px #fc0303, 0 0 -10px #fff, 0 0 -15px rgb(243, 82, 7), 0 0 -20px rgb(255, 0, 0), 0 0 30px rgb(255, 0, 0), 0 0 40px rgb(255, 0, 0), 0 0 55px rgb(255, 0, 0), 0 0 75px rgb(255, 0, 0); }
         100% { color: #fff; border-color: none; }
       }
 </style>
@@ -115,7 +111,7 @@
     <h1 class="neonGlow">Welcome Capt. Wil</h1>
     <ul>
     <input type="range" min="0" max="1" step="0.01" value="1" class="volumeControl">
-    <h4 class="neonGlow">Volume</h4>
+    <h4 class="pulsateText">Volume</h4>
     </ul>
     <ul id="savedSongs">
         <!-- Songs will be dynamically added here -->
